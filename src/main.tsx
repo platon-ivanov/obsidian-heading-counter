@@ -1,4 +1,4 @@
-import { debounce, Plugin, MarkdownFileInfo, MarkdownView } from "obsidian";
+import { debounce, Plugin, MarkdownView } from "obsidian";
 import { cmPlugin } from "./cmPlugin";
 import { CountPluginSettings, DEFAULT_SETTINGS, SettingTab } from "./settings";
 import { Extension } from "@codemirror/state";
