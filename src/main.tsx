@@ -1,4 +1,4 @@
-import { debounce, Plugin } from "obsidian";
+import { debounce, Plugin, MarkdownFileInfo, MarkdownView } from "obsidian";
 import { cmPlugin } from "./cmPlugin";
 import { CountPluginSettings, DEFAULT_SETTINGS, SettingTab } from "./settings";
 import { Extension } from "@codemirror/state";
@@ -31,7 +31,7 @@ export default class CountPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("editor-change", (file, mdView) => {
-				mdView.previewMode.rerender(true);
+				(mdView as MarkdownView).previewMode.rerender(true);
 			})
 		);
 
