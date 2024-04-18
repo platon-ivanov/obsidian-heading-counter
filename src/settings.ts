@@ -5,12 +5,16 @@ export interface CountPluginSettings {
 	joinSymbol: string;
 	endSymbol: string;
 	countStartLvl: number;
+	frontmatterDirectiveKey: string;
+	isShowByDefault: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<CountPluginSettings> = {
 	joinSymbol: ".",
 	endSymbol: ". ",
 	countStartLvl: 1,
+	frontmatterDirectiveKey: "show-visually-numbered-headings",
+	isShowByDefault: false,
 };
 
 export class SettingTab extends PluginSettingTab {
