@@ -61,11 +61,7 @@ export function headingCountPlugin(plugin: CountPlugin) {
 				const frontmatter = parseYaml(frontmatterString);
 				let frontmatterDirectiveKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
 				// let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] === undefined ? plugin.isDefaultShowVisualNumbering() : frontmatter[frontmatterDirectiveKey];
-				console.log(frontmatter[frontmatterDirectiveKey]);
-				console.log(plugin.isDefaultShowVisualNumbering());
 				let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] ?? plugin.isDefaultShowVisualNumbering();
-				console.log(isShowVisualNumbering);
-
 
 				if (isShowVisualNumbering) {
 					syntaxTree(view.state).iterate({
