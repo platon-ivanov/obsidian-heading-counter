@@ -51,7 +51,8 @@ export function headingCountPlugin(plugin: CountPlugin) {
 				const doc = view.state.doc.toString();
                 const frontmatterEnd = doc.indexOf('---', 3);
                 const frontmatterString = doc.slice(0, frontmatterEnd);
-				let isShowVisualNumbering: boolean = frontmatterString.includes("is-show-visually-numbered-headings");
+				let frontmatterKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
+				let isShowVisualNumbering: boolean =
 
 				syntaxTree(view.state).iterate({
 					enter(node) {

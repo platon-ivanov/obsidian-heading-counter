@@ -13,7 +13,7 @@ export const DEFAULT_SETTINGS: Partial<CountPluginSettings> = {
 	joinSymbol: ".",
 	endSymbol: ". ",
 	countStartLvl: 1,
-	frontmatterDirectiveKey: "show-visually-numbered-headings",
+	frontmatterDirectiveKey: "visually-numbered-headings",
 	isShowByDefault: false,
 };
 
