@@ -25,6 +25,11 @@ export default class CountPlugin extends Plugin {
 		return this.settings.isShowByDefault;
 	}
 
+	isShowVisualNumbering(): boolean {
+		return this.isDefaultShowVisualNumbering();
+	}
+
+
 	async onload(): Promise<void> {
 		await this.loadSettings();
 		this.addSettingTab(new SettingTab(this.app, this));
@@ -59,11 +64,13 @@ export default class CountPlugin extends Plugin {
 			const sourcePath = context.sourcePath;
 			const frontmatter = context.frontmatter;
 
-			// let isShow: boolean = this.settings.isShowByDefault;
-			// if (frontmatter && frontmatter[this.settings.frontmatterDirectiveKey] !== undefined) {
-			// 	isShow = frontmatter[this.settings.frontmatterDirectiveKey];
-			// }
-
+			let isShow: boolean = this.settings.isShowByDefault;
+			if (frontmatter && frontmatter[this.settings.frontmatterDirectiveKey] !== undefined) {
+				isShow = frontmatter[this.settings.frontmatterDirectiveKey];
+			}
+			if (!isShow) {
+				return;
+			}
 			const headings = element.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6");
 
 
