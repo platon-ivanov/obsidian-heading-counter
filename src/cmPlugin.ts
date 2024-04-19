@@ -48,12 +48,19 @@ export function headingCountPlugin(plugin: CountPlugin) {
 			buildDecorations(view: EditorView): DecorationSet {
 				const builder = new RangeSetBuilder<Decoration>();
 				const numGen = new NumberGenerator(plugin);
+				const doc = view.state.doc.toString();
+                const frontmatterEnd = doc.indexOf('---', 3);
+                const frontmatterString = doc.slice(0, frontmatterEnd);
+				let isShowVisualNumbering: boolean = frontmatterString.includes("is-show-visually-numbered-headings");
 
 				syntaxTree(view.state).iterate({
 					enter(node) {
 						const nodeName = node.type.name;
 
 						if (nodeName.startsWith(className)) {
+							if (!isShowVisualNumbering) {
+								return;
+							}
 							const hRef = node;
 							const hLevel = Number(nodeName.split(className)[1]);
 
