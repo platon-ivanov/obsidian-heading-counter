@@ -60,31 +60,30 @@ export function headingCountPlugin(plugin: CountPlugin) {
                 const frontmatterString = doc.slice(0, frontmatterEnd);
 				const frontmatter = parseYaml(frontmatterString);
 				let frontmatterDirectiveKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
-				let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] ?? plugin.isDefaultShowVisualNumbering();
+				let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] === undefined ? plugin.isDefaultShowVisualNumbering() : frontmatter[frontmatterDirectiveKey];
 
-				syntaxTree(view.state).iterate({
-					enter(node) {
-						const nodeName = node.type.name;
+				if (isShowVisualNumbering) {
+					syntaxTree(view.state).iterate({
+						enter(node) {
+							const nodeName = node.type.name;
 
-						if (nodeName.startsWith(className)) {
-							if (!isShowVisualNumbering) {
-								return;
+							if (nodeName.startsWith(className)) {
+								const hRef = node;
+								const hLevel = Number(nodeName.split(className)[1]);
+
+								builder.add(
+									hRef.from,
+									hRef.from,
+									Decoration.widget({
+										widget: new CountWidget(
+											numGen.nextNum(hLevel)
+										),
+									})
+								);
 							}
-							const hRef = node;
-							const hLevel = Number(nodeName.split(className)[1]);
-
-							builder.add(
-								hRef.from,
-								hRef.from,
-								Decoration.widget({
-									widget: new CountWidget(
-										numGen.nextNum(hLevel)
-									),
-								})
-							);
-						}
-					},
-				});
+						},
+					});
+				}
 
 				return builder.finish();
 			}
