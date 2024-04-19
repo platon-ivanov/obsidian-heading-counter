@@ -41,6 +41,7 @@ export class SettingTab extends PluginSettingTab {
 						await this.plugin.updateSettings({ joinSymbol: value });
 					})
 			);
+
 		new Setting(containerEl)
 			.setName("Ending symbol")
 			.setDesc("Symbol after the counter")
@@ -70,5 +71,27 @@ export class SettingTab extends PluginSettingTab {
 					});
 				});
 			});
+
+		new Setting(containerEl)
+			.setName("Local note setting property name")
+			.setDesc("Frontmatter property name that overrides global default")
+			.addText(text => text
+				.setPlaceholder("visually-numbered-headings")
+				.setValue(this.plugin.settings.frontmatterDirectiveKey)
+				.onChange(async (value) => {
+					await this.plugin.updateSettings({ frontmatterDirectiveKey: value });
+				})
+			);
+
+		new Setting(containerEl)
+			.setName("Show visually numbered headings by default")
+			.setDesc("Enable to show numbered headings by default without requiring frontmatter directive")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.isShowByDefault)
+				.onChange(async (value) => {
+					await this.plugin.updateSettings({ isShowByDefault: value });
+				})
+			);
 	}
 }
+
