@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: Partial<CountPluginSettings> = {
 	endSymbol: ". ",
 	countStartLvl: 1,
 	frontmatterDirectiveKey: "show-visually-numbered-headings",
-	isShowByDefault: false,
+	isShowByDefault: true,
 };
 
 export class SettingTab extends PluginSettingTab {
