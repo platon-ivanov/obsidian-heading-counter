@@ -10,6 +10,13 @@ import {
 	WidgetType,
 } from "@codemirror/view";
 import CountPlugin from "./main";
+// import yaml from "yaml";
+// npm install yaml
+const {
+	parse: parseYaml,
+	stringify: stringifyYaml
+} = require('yaml')
+
 
 const className = "HyperMD-header_HyperMD-header-";
 
@@ -51,8 +58,9 @@ export function headingCountPlugin(plugin: CountPlugin) {
 				const doc = view.state.doc.toString();
                 const frontmatterEnd = doc.indexOf('---', 3);
                 const frontmatterString = doc.slice(0, frontmatterEnd);
-				let frontmatterKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
-				let isShowVisualNumbering: boolean =
+				const frontmatter = parseYaml(frontmatterString);
+				let frontmatterDirectiveKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
+				let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] ?? plugin.isDefaultShowVisualNumbering();
 
 				syntaxTree(view.state).iterate({
 					enter(node) {

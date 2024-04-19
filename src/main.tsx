@@ -25,6 +25,11 @@ export default class CountPlugin extends Plugin {
 		return this.settings.isShowByDefault;
 	}
 
+	isShowVisualNumbering(): boolean {
+		return this.isDefaultShowVisualNumbering();
+	}
+
+
 	async onload(): Promise<void> {
 		await this.loadSettings();
 		this.addSettingTab(new SettingTab(this.app, this));
