@@ -1,4 +1,4 @@
-import { debounce, Plugin } from "obsidian";
+import { debounce, Plugin, MarkdownView } from "obsidian";
 import { cmPlugin } from "./cmPlugin";
 import { CountPluginSettings, DEFAULT_SETTINGS, SettingTab } from "./settings";
 import { Extension } from "@codemirror/state";
@@ -21,6 +21,15 @@ export default class CountPlugin extends Plugin {
 		true
 	);
 
+	isDefaultShowVisualNumbering(): boolean {
+		return this.settings.isShowByDefault;
+	}
+
+	isShowVisualNumbering(): boolean {
+		return this.isDefaultShowVisualNumbering();
+	}
+
+
 	async onload(): Promise<void> {
 		await this.loadSettings();
 		this.addSettingTab(new SettingTab(this.app, this));
@@ -31,7 +40,7 @@ export default class CountPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("editor-change", (file, mdView) => {
-				mdView.previewMode.rerender(true);
+				(mdView as MarkdownView).previewMode.rerender(true);
 			})
 		);
 
@@ -41,11 +50,29 @@ export default class CountPlugin extends Plugin {
 			})
 		);
 
+        this.addCommand({
+            id: 'refresh-heading-visual-numbering',
+            name: 'Refresh heading numbering',
+            callback: () => {
+                this.resetCache();
+            }
+        });
+
 		this.registerMarkdownPostProcessor((element, context) => {
-			const headings =
-				element.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6");
 
 			const docId = context.docId;
+			const sourcePath = context.sourcePath;
+			const frontmatter = context.frontmatter;
+
+			let isShow: boolean = this.settings.isShowByDefault;
+			if (frontmatter && frontmatter[this.settings.frontmatterDirectiveKey] !== undefined) {
+				isShow = frontmatter[this.settings.frontmatterDirectiveKey];
+			}
+			if (!isShow) {
+				return;
+			}
+			const headings = element.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6");
+
 
 			if (!this.mdNumGenCache.exists(docId)) {
 				const numGen = new NumberGenerator(this);

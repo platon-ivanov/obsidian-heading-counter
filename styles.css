@@ -23,3 +23,44 @@
 .outline .tree-item-icon {
 	position: absolute;
 }
+
+.cm-fold-indicator .collapse-indicator {
+  /* height: 1rem !important; */
+}
+
+.HyperMD-header-1 .collapse-indicator {
+  position: relative;
+  left: -1em;
+}
+
+.HyperMD-header-2 .collapse-indicator {
+  position: relative;
+  left: -2em;
+}
+
+.HyperMD-header-3 .collapse-indicator {
+  position: relative;
+  left: -2.9em;
+}
+
+.HyperMD-header-4 .collapse-indicator {
+  position: relative;
+  left: -4em;
+}
+
+.HyperMD-header-5 .collapse-indicator {
+  position: relative;
+  left: -5em;
+}
+
+.HyperMD-header-6 .collapse-indicator {
+  position: relative;
+  left: -6em;
+}
+
+.heading-collapse-indicator {
+  position: relative;
+  margin-top: -1.6rem;
+}
+
+

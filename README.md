@@ -24,3 +24,9 @@ The plugin is not yet available in Obsidian community plugin list, so it has to 
     > **Note**: On some machines the `.obsidian` folder may be hidden by default.
 3. **Enable** the plugin in the `Community plugins` tab
     > **Note**: You might be prompted about [Restricted Mode](https://help.obsidian.md/Advanced+topics/Community+plugins#Safe+Mode). You can disable it and enable the plugin. Another way is to head to Settings → Community plugins. Disable Restricted mode and enable the plugin from there.
+
+### Usage
+
+The visually-numbered headings can be enabled or disabled globally by default under the plugin settings.
+
+The numbering can be enabled or disabled on a note-by-note basis by setting the appropriate frontmatter YAML metadata property, `visually-numbered-headings` to either `true` or `false`.

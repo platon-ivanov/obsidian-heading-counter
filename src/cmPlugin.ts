@@ -10,6 +10,13 @@ import {
 	WidgetType,
 } from "@codemirror/view";
 import CountPlugin from "./main";
+// import yaml from "yaml";
+// npm install yaml
+const {
+	parse: parseYaml,
+	stringify: stringifyYaml
+} = require('yaml')
+
 
 const className = "HyperMD-header_HyperMD-header-";
 
@@ -48,27 +55,39 @@ export function headingCountPlugin(plugin: CountPlugin) {
 			buildDecorations(view: EditorView): DecorationSet {
 				const builder = new RangeSetBuilder<Decoration>();
 				const numGen = new NumberGenerator(plugin);
+				const doc = view.state.doc.toString();
+                const frontmatterEnd = doc.indexOf('---', 3);
+                const frontmatterString = doc.slice(0, frontmatterEnd);
+				const frontmatter = parseYaml(frontmatterString);
+				let frontmatterDirectiveKey: string = plugin.settings.frontmatterDirectiveKey; // "is-show-visually-numbered-headings");
+				// let isShowVisualNumbering: boolean = frontmatter[frontmatterDirectiveKey] === undefined ? plugin.isDefaultShowVisualNumbering() : frontmatter[frontmatterDirectiveKey];
+				let isShowVisualNumbering: boolean =
+					typeof frontmatter[frontmatterDirectiveKey] === 'string' ?
+					frontmatter[frontmatterDirectiveKey].toLowerCase() === 'true' :
+					frontmatter[frontmatterDirectiveKey] ?? plugin.isDefaultShowVisualNumbering();
 
-				syntaxTree(view.state).iterate({
-					enter(node) {
-						const nodeName = node.type.name;
+				if (isShowVisualNumbering) {
+					syntaxTree(view.state).iterate({
+						enter(node) {
+							const nodeName = node.type.name;
 
-						if (nodeName.startsWith(className)) {
-							const hRef = node;
-							const hLevel = Number(nodeName.split(className)[1]);
+							if (nodeName.startsWith(className)) {
+								const hRef = node;
+								const hLevel = Number(nodeName.split(className)[1]);
 
-							builder.add(
-								hRef.from,
-								hRef.from,
-								Decoration.widget({
-									widget: new CountWidget(
-										numGen.nextNum(hLevel)
-									),
-								})
-							);
-						}
-					},
-				});
+								builder.add(
+									hRef.from,
+									hRef.from,
+									Decoration.widget({
+										widget: new CountWidget(
+											numGen.nextNum(hLevel)
+										),
+									})
+								);
+							}
+						},
+					});
+				}
 
 				return builder.finish();
 			}

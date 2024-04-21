@@ -5,12 +5,16 @@ export interface CountPluginSettings {
 	joinSymbol: string;
 	endSymbol: string;
 	countStartLvl: number;
+	frontmatterDirectiveKey: string;
+	isShowByDefault: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<CountPluginSettings> = {
 	joinSymbol: ".",
 	endSymbol: ". ",
 	countStartLvl: 1,
+	frontmatterDirectiveKey: "visually-numbered-headings",
+	isShowByDefault: true,
 };
 
 export class SettingTab extends PluginSettingTab {
@@ -37,6 +41,7 @@ export class SettingTab extends PluginSettingTab {
 						await this.plugin.updateSettings({ joinSymbol: value });
 					})
 			);
+
 		new Setting(containerEl)
 			.setName("Ending symbol")
 			.setDesc("Symbol after the counter")
@@ -66,5 +71,27 @@ export class SettingTab extends PluginSettingTab {
 					});
 				});
 			});
+
+		new Setting(containerEl)
+			.setName("Show visually numbered headings by default")
+			.setDesc("Enable to show numbered headings globally by default.")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.isShowByDefault)
+				.onChange(async (value) => {
+					await this.plugin.updateSettings({ isShowByDefault: value });
+				})
+			);
+
+		new Setting(containerEl)
+			.setName("Local note setting property name")
+			.setDesc("Frontmatter property name that overrides global default. A note with this property set to `true` will always show the numbered headings, while that with it set to `false` will always hide them, regardless of the global default.")
+			.addText(text => text
+				.setPlaceholder("visually-numbered-headings")
+				.setValue(this.plugin.settings.frontmatterDirectiveKey)
+				.onChange(async (value) => {
+					await this.plugin.updateSettings({ frontmatterDirectiveKey: value });
+				})
+			);
 	}
 }
+
